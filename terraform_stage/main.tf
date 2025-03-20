@@ -20,7 +20,7 @@ terraform {
 }
 
 module "vpc" {
-  source              = "./modules/vpc"
+  source              = "../modules/vpc"
 
   vpc_main_cidr = var.vpc_main_cidr
   stage       = var.stage
@@ -42,7 +42,7 @@ module "vpc" {
 }
 
 module "ec2" {
-  source          = "./modules/ec2"
+  source          = "../modules/ec2"
   stage           = var.stage
   servicename     = var.servicename
   ami             = "ami-0ea4029a71f24b319" 
@@ -56,7 +56,7 @@ module "ec2" {
 
 
 module "alb" {
-  source      = "./modules/alb"  # ALB 모듈의 경로 (변경 가능)
+  source      = "../modules/alb"  # ALB 모듈의 경로 (변경 가능)
   
   stage       = var.stage
   servicename = var.servicename
