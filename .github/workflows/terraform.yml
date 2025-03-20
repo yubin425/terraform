@@ -1,71 +1,7 @@
-name: 'Terraform'
-
-on:
-  push:
-    branches:
-      - 'master' # 나중에 스테이지 명으로 변경
-  pull_request:
-    branches:
-      - 'master'
-    paths-ignore:
-      - '**/stage-terraform.yml'
-  delete:
-    branches:
-      - 'feature/*'  # feature 브랜치 삭제 시 destroy 실행
-  workflow_dispatch:
-    inputs:
-      confirm_destroy:
-        description: 'Confirm if you want to destroy the Terraform backend (type DESTROY to confirm)'
-        required: true
-        default: 'DESTROY'
-
-env:
-  AWS_REGION: us-east-1  # AWS 리전 설정
-
-jobs:
-  terraform:
-    name: 'Terraform'
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: latest
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.TF_NILLA_AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.TF_NILLA_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Terraform Init
-        run: |
-          cd terraform_stage
-          terraform init
-
-      - name: Terraform Plan
-        run: |
-          cd terraform_stage
-          terraform plan -input=false
-
-      - name: Terraform Apply
-        run: |
-          cd terraform_stage
-          terraform apply -auto-approve -input=false
-
   destroy:
     name: 'Terraform Destroy'
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.confirm_destroy == 'DESTROY'
+    if: github.event_name == 'delete' || (github.event_name == 'workflow_dispatch' && github.event.inputs.confirm_destroy == 'DESTROY')
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -81,6 +17,11 @@ jobs:
           aws-access-key-id: ${{ secrets.TF_NILLA_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.TF_NILLA_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init  # 🚀 추가된 부분
+        run: |
+          cd terraform_stage
+          terraform init -reconfigure  # 백엔드 초기화 실행
 
       - name: Terraform Destroy
         run: |
