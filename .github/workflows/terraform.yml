@@ -21,6 +21,41 @@ env:
   AWS_REGION: us-east-1  # set this to your preferred AWS region, e.g. us-west-12
 
 jobs:
+  backend_destroy:
+  runs-on: ubuntu-latest
+  needs: backend_setup
+  if: github.event.inputs.confirm_destroy == 'DESTROY' || github.event.pull_request.merged == true || github.event_name == 'delete'
+  
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: '1.8.0'
+
+    - name: Confirm Destruction
+      run: |
+        echo "Destruction confirmed. Proceeding with Terraform destroy operation."
+
+    - name: Terraform Init for Destroy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.TF_NILLA_AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_NILLA_AWS_SECRET_ACCESS_KEY }}
+      run: |
+        cd terraform_stage; terraform init \
+          -backend-config="region=us-east-1" \
+          -backend-config="bucket=nilla-terraform-lock" \
+          -backend-config="key=stage/terraform/terraform.tfstate"
+
+    - name: Terraform Destroy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.TF_NILLA_AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.TF_NILLA_AWS_SECRET_ACCESS_KEY }}
+      run: |
+        cd terraform_stage; terraform destroy -auto-approve
+
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
