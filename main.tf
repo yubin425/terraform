@@ -7,17 +7,17 @@ provider "aws" {
 }
 }
 
-# terraform {
-#   required_version = ">= 1.0.0, < 2.0.0"
-#   backend "s3" {
-#         bucket = "nilla-terraform-s3"
-#         key = "vpc/terraform.tfstate"
-#         region = "us-east-1"
-#         encrypt = true
-#         dynamodb_table = "nilla-terraform-lock"
+terraform {
+  required_version = ">= 1.0.0, < 2.0.0"
+  backend "s3" {
+        bucket = "nilla-terraform-state-s3"
+        key = "vpc/terraform.tfstate"
+        region = "us-east-1"
+        encrypt = true
+        dynamodb_table = "nilla-terraform-lock"
     
-#   }
-# }
+  }
+}
 
 module "vpc" {
   source              = "./modules/vpc"
