@@ -138,3 +138,17 @@ module "addons" {
   cluster_depends_on    = module.eks_cluster
   nodegroup_depends_on  = module.eks_nodegroup
 }
+
+#alb-controller
+module "alb_controller" {
+  source = "../modules/eks/alb-controller"
+
+  cluster_name = module.eks_cluster.cluster_name
+  region       = var.region
+  vpc_id       = module.vpc.vpc_id
+
+  alb_sa_role_arn = module.eks_oidc.alb_sa_role_arn
+  alb_policy_attachment_depends_on = [
+    module.eks_oidc.alb_policy_attachment
+  ]
+}

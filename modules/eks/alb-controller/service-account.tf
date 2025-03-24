@@ -3,7 +3,7 @@ resource "kubernetes_service_account" "alb_sa" {
     name      = "aws-load-balancer-controller"
     namespace = "kube-system"
     annotations = {
-      "eks.amazonaws.com/role-arn" = aws_iam_role.alb_sa_role.arn
+      "eks.amazonaws.com/role-arn" = var.alb_sa_role_arn
     }
   }
 }
