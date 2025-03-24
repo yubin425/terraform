@@ -4,16 +4,15 @@ variable "region" {
 }
 variable "stage" {
   type    = string
-  default = "stage"
+  default = "dev"
 }
 variable "servicename" {
   type    = string
-  default = "terrafrom-0425"
+  default = "tf-0425"
 }
 variable "tags" {
   type = map(string)
   default = {
-    "name" = "nilla0425-VPC"
   }
 }
 variable "az" {
@@ -108,33 +107,33 @@ variable "instance_ebs_volume" {
 #   type = list
 # }
 
-##RDS
-variable "rds_dbname" {
-  type    = string
-  default = "jung9546"
-}
-variable "rds_instance_count" {
-  type    = string
-  default = "2"
-}
-variable "sg_allow_ingress_list_aurora" {
-  type    = list(any)
-  default = ["10.2.92.64/26", "10.2.92.128/26", "10.2.92.18/32"]
-}
-variable "associate_public_ip_address" {
-  type    = bool
-  default = true
-}
+# ##RDS
+# variable "rds_dbname" {
+#   type    = string
+#   default = "jung9546"
+# }
+# variable "rds_instance_count" {
+#   type    = string
+#   default = "2"
+# }
+# variable "sg_allow_ingress_list_aurora" {
+#   type    = list(any)
+#   default = ["10.2.92.64/26", "10.2.92.128/26", "10.2.92.18/32"]
+# }
+# variable "associate_public_ip_address" {
+#   type    = bool
+#   default = true
+# }
 
-##KMS
-variable "rds_kms_arn" {
-  type    = string
-  default = "arn:aws:kms:ap-northeast-2:471112992234:key/1dbf43f7-1847-434c-bc3c-1beb1b86e480"
-}
-variable "ebs_kms_key_id" {
-  type    = string
-  default = "arn:aws:kms:ap-northeast-2:471112992234:key/43b0228d-0a06-465c-b25c-7480b07b5276"
-}
+# ##KMS
+# variable "rds_kms_arn" {
+#   type    = string
+#   default = "arn:aws:kms:ap-northeast-2:471112992234:key/1dbf43f7-1847-434c-bc3c-1beb1b86e480"
+# }
+# variable "ebs_kms_key_id" {
+#   type    = string
+#   default = "arn:aws:kms:ap-northeast-2:471112992234:key/43b0228d-0a06-465c-b25c-7480b07b5276"
+# }
 
 #server_port
 variable "server_port" {
@@ -183,4 +182,9 @@ variable "sg_allow_comm_list" {
 variable "target_type" {
     type = string
     default = "instance"
+}
+
+variable "key_name" {
+    type = string
+    default = "kuber-key"
 }

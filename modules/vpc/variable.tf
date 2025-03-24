@@ -26,12 +26,12 @@ variable "subnet_public_az2" {
   type = string
 }
 
-variable "subnet_fe_az1" {
-  type = string
-}
-variable "subnet_fe_az2" {
-  type = string
-}
+# variable "subnet_fe_az1" {
+#   type = string
+# }
+# variable "subnet_fe_az2" {
+#   type = string
+# }
 
 variable "subnet_be_az1" {
   type = string

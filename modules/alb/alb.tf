@@ -3,7 +3,7 @@
 #alb 생성
 resource "aws_lb" "alb" {
   name               = "aws-alb-${var.stage}-${var.servicename}"
-  internal           = var.internal
+  internal           = var.internal #내부 alb or 외부 alb
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sg-alb.id]
   subnets            = var.subnet_ids #alb가 배포될 서브넷

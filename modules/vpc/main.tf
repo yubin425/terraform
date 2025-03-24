@@ -57,40 +57,40 @@ resource "aws_subnet" "pub_sub_2" {
 
 
 #프라이빗 서브넷 - nat 허용 (FE)
-resource "aws_subnet" "prv_sub_fe_1" {
-  vpc_id            = aws_vpc.nilla_terraform_vpc.id
-  cidr_block        = var.subnet_fe_az1
-  availability_zone       = element(var.az, 0)
-  map_public_ip_on_launch = false
-    tags = merge(tomap({
-         Name = upper("aws-subnet-${var.stage}-${var.servicename}-fe-az1"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
-         "kubernetes.io/role/internal-elb"     = 1}),
-        var.tags)
-  depends_on = [
-    aws_vpc.nilla_terraform_vpc
-  ]
-  lifecycle {
-    ignore_changes = [tags, tags_all]
-  }
-}
-resource "aws_subnet" "prv_sub_fe_2" {
-  vpc_id            = aws_vpc.nilla_terraform_vpc.id
-  cidr_block        = var.subnet_fe_az2
-  availability_zone       = element(var.az, 1)
-  map_public_ip_on_launch = false
-    tags = merge(tomap({
-         Name = upper("aws-subnet-${var.stage}-${var.servicename}-fe-az2"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
-         "kubernetes.io/role/internal-elb"     = 1}),
-        var.tags)
-  depends_on = [
-    aws_vpc.nilla_terraform_vpc
-  ]
-  lifecycle {
-    ignore_changes = [tags, tags_all]
-  }
-}
+# resource "aws_subnet" "prv_sub_fe_1" {
+#   vpc_id            = aws_vpc.nilla_terraform_vpc.id
+#   cidr_block        = var.subnet_fe_az1
+#   availability_zone       = element(var.az, 0)
+#   map_public_ip_on_launch = false
+#     tags = merge(tomap({
+#          Name = upper("aws-subnet-${var.stage}-${var.servicename}-fe-az1"),
+#          "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+#          "kubernetes.io/role/internal-elb"     = 1}),
+#         var.tags)
+#   depends_on = [
+#     aws_vpc.nilla_terraform_vpc
+#   ]
+#   lifecycle {
+#     ignore_changes = [tags, tags_all]
+#   }
+# }
+# resource "aws_subnet" "prv_sub_fe_2" {
+#   vpc_id            = aws_vpc.nilla_terraform_vpc.id
+#   cidr_block        = var.subnet_fe_az2
+#   availability_zone       = element(var.az, 1)
+#   map_public_ip_on_launch = false
+#     tags = merge(tomap({
+#          Name = upper("aws-subnet-${var.stage}-${var.servicename}-fe-az2"),
+#          "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+#          "kubernetes.io/role/internal-elb"     = 1}),
+#         var.tags)
+#   depends_on = [
+#     aws_vpc.nilla_terraform_vpc
+#   ]
+#   lifecycle {
+#     ignore_changes = [tags, tags_all]
+#   }
+# }
 
 #프라이빗 서브넷 - BE 
 resource "aws_subnet" "prv_sub_be_1" {
@@ -228,43 +228,42 @@ resource "aws_route_table_association" "pub_rt2_asso"{
         route_table_id = aws_route_table.pub_rt.id
 }
 
-#프라이빗 서브넷(fe) 라우팅 테이블
-resource "aws_route_table" "prv_fe_rt1"{
-        vpc_id = aws_vpc.nilla_terraform_vpc.id
-        route{
-        cidr_block = "0.0.0.0/0"
-        nat_gateway_id = aws_nat_gateway.nat_gw_1.id
-        }
-        tags = merge(tomap({
-                Name = "aws-rt1-${var.stage}-${var.servicename}-prv-fe"}), 
-                var.tags)        
-}
-resource "aws_route_table" "prv_fe_rt2"{
-        vpc_id = aws_vpc.nilla_terraform_vpc.id
-        route{
-        cidr_block = "0.0.0.0/0"
-        nat_gateway_id = aws_nat_gateway.nat_gw_2.id
-        }
-        tags = merge(tomap({
-                Name = "aws-rt2-${var.stage}-${var.servicename}-prv-fe"}), 
-                var.tags)
-}
-resource "aws_route_table_association" "prv_fe_rt1_asso"{
-        subnet_id= aws_subnet.prv_sub_fe_1.id
-        route_table_id = aws_route_table.prv_fe_rt1.id
-}
-resource "aws_route_table_association" "prv_fe_rt2_asso"{
-        subnet_id= aws_subnet.prv_sub_fe_2.id
-        route_table_id = aws_route_table.prv_fe_rt2.id
-}
+# #프라이빗 서브넷(fe) 라우팅 테이블
+# resource "aws_route_table" "prv_fe_rt1"{
+#         vpc_id = aws_vpc.nilla_terraform_vpc.id
+#         route{
+#         cidr_block = "0.0.0.0/0"
+#         nat_gateway_id = aws_nat_gateway.nat_gw_1.id
+#         }
+#         tags = merge(tomap({
+#                 Name = "aws-rt1-${var.stage}-${var.servicename}-prv-fe"}), 
+#                 var.tags)        
+# }
+# resource "aws_route_table" "prv_fe_rt2"{
+#         vpc_id = aws_vpc.nilla_terraform_vpc.id
+#         route{
+#         cidr_block = "0.0.0.0/0"
+#         nat_gateway_id = aws_nat_gateway.nat_gw_2.id
+#         }
+#         tags = merge(tomap({
+#                 Name = "aws-rt2-${var.stage}-${var.servicename}-prv-fe"}), 
+#                 var.tags)
+# }
+# resource "aws_route_table_association" "prv_fe_rt1_asso"{
+#         subnet_id= aws_subnet.prv_sub_fe_1.id
+#         route_table_id = aws_route_table.prv_fe_rt1.id
+# }
+# resource "aws_route_table_association" "prv_fe_rt2_asso"{
+#         subnet_id= aws_subnet.prv_sub_fe_2.id
+#         route_table_id = aws_route_table.prv_fe_rt2.id
+# }
 
-#프라이빗 서브넷(be) 라우팅 테이블
+#프라이빗 서브넷(be) 라우팅 테이블 (nat 허용)
 resource "aws_route_table" "prv_be_rt1"{
         vpc_id = aws_vpc.nilla_terraform_vpc.id
-        # 내부 통신을 위한 라우팅 (VPC 자체 라우팅)
         route {
-        cidr_block = aws_vpc.nilla_terraform_vpc.cidr_block # VPC 내부 통신
-        gateway_id = "local"
+        cidr_block = "0.0.0.0/0" #aws_vpc.nilla_terraform_vpc.cidr_block # VPC 내부 통신
+        nat_gateway_id = aws_nat_gateway.nat_gw_1.id
         }
         tags = merge(tomap({
                 Name = "aws-rt1-${var.stage}-${var.servicename}-prv-be"}), 
@@ -273,10 +272,9 @@ resource "aws_route_table" "prv_be_rt1"{
 
 resource "aws_route_table" "prv_be_rt2"{
         vpc_id = aws_vpc.nilla_terraform_vpc.id
-        # 내부 통신을 위한 라우팅 (VPC 자체 라우팅)
         route {
-        cidr_block = aws_vpc.nilla_terraform_vpc.cidr_block # VPC 내부 통신
-        gateway_id = "local"
+        cidr_block = "0.0.0.0/0" #aws_vpc.nilla_terraform_vpc.cidr_block # VPC 내부 통신
+        nat_gateway_id = aws_nat_gateway.nat_gw_2.id
         }
         tags = merge(tomap({
                 Name = "aws-rt2-${var.stage}-${var.servicename}-prv-be"}), 
@@ -286,14 +284,16 @@ resource "aws_route_table" "prv_be_rt2"{
 resource "aws_route_table_association" "prv_be_rt1_asso"{
         subnet_id= aws_subnet.prv_sub_be_1.id
         route_table_id = aws_route_table.prv_be_rt1.id
+        depends_on = [aws_nat_gateway.nat_gw_1]
 }
 resource "aws_route_table_association" "prv_be_rt2_asso"{
         subnet_id= aws_subnet.prv_sub_be_2.id
         route_table_id = aws_route_table.prv_be_rt2.id
+        depends_on = [aws_nat_gateway.nat_gw_2]
 }
 
 
-#프라이빗 서브넷(rds) 라우팅 테이블
+#프라이빗 서브넷(db) 라우팅 테이블
 resource "aws_route_table" "prv_rds_rt1"{
         vpc_id = aws_vpc.nilla_terraform_vpc.id
         # 내부 통신을 위한 라우팅 (VPC 자체 라우팅)
