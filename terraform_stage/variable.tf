@@ -188,3 +188,9 @@ variable "key_name" {
     type = string
     default = "kuber-key"
 }
+
+variable "argocd_domain" {
+  description = "Domain name for Argo CD UI"
+  type        = string
+  default = "argo.nilla.o-r.kr"
+}

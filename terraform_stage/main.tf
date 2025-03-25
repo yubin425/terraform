@@ -139,7 +139,35 @@ module "addons" {
   nodegroup_depends_on  = module.eks_nodegroup
 }
 
+
+data "aws_eks_cluster" "cluster" {
+  name = module.eks_cluster.cluster_name
+  depends_on = [module.eks_cluster]
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks_cluster.cluster_name
+  depends_on = [module.eks_cluster]
+}
+
+
 #alb-controller
+provider "kubernetes" {
+  alias                  = "eks"
+  host                   = data.aws_eks_cluster.cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.cluster.token
+}
+
+provider "helm" {
+  alias = "eks"
+  kubernetes {
+    host                   = data.aws_eks_cluster.cluster.endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority[0].data)
+    token                  = data.aws_eks_cluster_auth.cluster.token
+  }
+}
+
 module "alb_controller" {
   source = "../modules/eks/alb-controller"
 
@@ -151,4 +179,21 @@ module "alb_controller" {
   alb_policy_attachment_depends_on = [
     module.eks_oidc.alb_policy_attachment
   ]
+    providers = {
+    kubernetes = kubernetes.eks
+    helm       = helm.eks
+  }
+    depends_on = [module.eks_cluster]
+}
+
+module "argocd" {
+  source = "../modules/argocd"
+  acm_certificate_arn = var.certificate_arn
+  argocd_domain = var.argocd_domain
+  git_be_url = "https://github.com/yubin425/terraform-be.git"
+    providers = {
+    kubernetes = kubernetes.eks 
+    helm       = helm.eks
+  }
+   depends_on = [module.eks_cluster]
 }

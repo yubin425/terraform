@@ -28,7 +28,7 @@ resource "aws_subnet" "pub_sub_1" {
 
   tags = merge(tomap({
          Name = upper("aws-subnet-${var.stage}-${var.servicename}-pub-az1"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+         "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
          "kubernetes.io/role/elb" = 1}), var.tags)
   depends_on = [ #vpc 생성 후 서브넷이 생성되도록 보장
     aws_vpc.nilla_terraform_vpc
@@ -45,7 +45,7 @@ resource "aws_subnet" "pub_sub_2" {
 
   tags = merge(tomap({
          Name = upper("aws-subnet-${var.stage}-${var.servicename}-pub-az2"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+         "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
          "kubernetes.io/role/elb" = 1}), var.tags)
   depends_on = [ #vpc 생성 후 서브넷이 생성되도록 보장
     aws_vpc.nilla_terraform_vpc
@@ -64,7 +64,7 @@ resource "aws_subnet" "pub_sub_2" {
 #   map_public_ip_on_launch = false
 #     tags = merge(tomap({
 #          Name = upper("aws-subnet-${var.stage}-${var.servicename}-fe-az1"),
-#          "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+#          "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
 #          "kubernetes.io/role/internal-elb"     = 1}),
 #         var.tags)
 #   depends_on = [
@@ -81,7 +81,7 @@ resource "aws_subnet" "pub_sub_2" {
 #   map_public_ip_on_launch = false
 #     tags = merge(tomap({
 #          Name = upper("aws-subnet-${var.stage}-${var.servicename}-fe-az2"),
-#          "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+#          "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
 #          "kubernetes.io/role/internal-elb"     = 1}),
 #         var.tags)
 #   depends_on = [
@@ -100,7 +100,7 @@ resource "aws_subnet" "prv_sub_be_1" {
   map_public_ip_on_launch = false
     tags = merge(tomap({
          Name = upper("aws-subnet-${var.stage}-${var.servicename}-be-az1"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+         "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
          "kubernetes.io/role/internal-elb"     = 1}),
         var.tags)
   depends_on = [
@@ -117,7 +117,7 @@ resource "aws_subnet" "prv_sub_be_2" {
   map_public_ip_on_launch = false
     tags = merge(tomap({
          Name = upper("aws-subnet-${var.stage}-${var.servicename}-be-az2"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+         "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
          "kubernetes.io/role/internal-elb"     = 1}),
         var.tags)
   depends_on = [
@@ -136,7 +136,7 @@ resource "aws_subnet" "prv_sub_db_1" {
   map_public_ip_on_launch = false
     tags = merge(tomap({
          Name = upper("aws-subnet-${var.stage}-${var.servicename}-db-az1"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+         "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
          "kubernetes.io/role/internal-elb"     = 1}),
         var.tags)
   depends_on = [
@@ -153,7 +153,7 @@ resource "aws_subnet" "prv_sub_db_2" {
   map_public_ip_on_launch = false
     tags = merge(tomap({
          Name = upper("aws-subnet-${var.stage}-${var.servicename}-db-az2"),
-         "kubernetes.io/cluster/aws-eks-cluster-${var.stage}-${var.servicename}" = "shared",
+         "kubernetes.io/cluster/eks-cluster-${var.stage}" = "shared",
          "kubernetes.io/role/internal-elb"     = 1}),
         var.tags)
   depends_on = [
