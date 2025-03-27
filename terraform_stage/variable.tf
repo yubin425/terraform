@@ -107,7 +107,50 @@ variable "instance_ebs_volume" {
 #   type = list
 # }
 
-# ##RDS
+##RDS
+variable "rds_name" {
+  description = "Identifier for the RDS instance"
+  type        = string
+  default = "mysql-db"
+}
+
+variable "engine" {
+  description = "Database engine (e.g., mysql, postgres)"
+  type        = string
+  default     = "mysql"
+}
+variable "engine_version" {
+  description = "Database engine version"
+  type        = string
+  default     = "8.0"
+}
+variable "instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t3.micro"
+}
+variable "allocated_storage" {
+  description = "Allocated storage in GB"
+  type        = number
+  default     = 20
+}
+variable "db_username" {
+  description = "Database username"
+  type        = string
+  default = "nilla"
+}
+variable "db_password" { #나중에 환경변수로 필히 변경
+  description = "Database password"
+  type        = string
+  sensitive   = true
+  default = "nilla0425"
+}
+variable "db_port" {
+  description = "Database port"
+  type        = number
+  default     = 3306
+}
+
 # variable "rds_dbname" {
 #   type    = string
 #   default = "jung9546"
@@ -168,10 +211,7 @@ variable "certificate_arn" {
     type  = string
     default = "arn:aws:acm:us-east-1:509399632105:certificate/2d0c695a-bbf8-4377-a80f-4e6937670f80"
 }
-variable "vpc_id" {
-    type  = string
-    default = "module.vpc.vpc_id "
-}
+
 # variable "instance_ids" {
 #     type  = list
 # }
@@ -194,3 +234,5 @@ variable "argocd_domain" {
   type        = string
   default = "argo.nilla.o-r.kr"
 }
+
+

@@ -36,22 +36,22 @@ resource "aws_eks_cluster" "this" {
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
   tags = merge({
-    Name = "aws-eks-cluster-${var.stage}-${var.servicename}"
+    Name = "eks-cluster-${var.stage}"
   }, var.tags)
 
   depends_on = [aws_iam_role_policy_attachment.eks_cluster_policy]
 }
 
-resource "aws_security_group" "eks_cluster_sg" {
-  name        = "eks-cluster-sg-${var.stage}-${var.servicename}"
-  description = "Security group for EKS cluster"
-  vpc_id      = var.vpc_id
+# resource "aws_security_group" "eks_cluster_sg" {
+#   name        = "eks-cluster-sg-${var.stage}-${var.servicename}"
+#   description = "Security group for EKS cluster"
+#   vpc_id      = var.vpc_id
 
 
-  tags = merge({
-    Name = "eks-cluster-sg-${var.stage}-${var.servicename}"
-  }, var.tags)
-}
+#   tags = merge({
+#     Name = "eks-cluster-sg-${var.stage}-${var.servicename}"
+#   }, var.tags)
+# }
 
 resource "aws_security_group_rule" "eks_api_from_bastion" {
   type                     = "ingress"

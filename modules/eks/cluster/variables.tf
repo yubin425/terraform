@@ -11,3 +11,12 @@ variable "cluster_version" {
 variable "tags" {
   type = map(string)
 }
+variable "sg_eks_cluster_ingress_list" {
+  type = list(string)
+}
+variable "sg_eks_node_id"{
+
+}
+variable "sg_eks_node"{
+
+}

@@ -7,6 +7,9 @@ output "public_subnet_ids" {
 output "be_subnet_ids" {
   value = [aws_subnet.prv_sub_be_1.id, aws_subnet.prv_sub_be_2.id]
 }
+output "db_subnet_ids" {
+  value = [aws_subnet.prv_sub_db_1.id, aws_subnet.prv_sub_db_2.id]
+}
 # output "fe_subnet_ids" {
 #   value = [aws_subnet.prv_sub_fe_1.id, aws_subnet.prv_sub_fe_2.id]
 # }

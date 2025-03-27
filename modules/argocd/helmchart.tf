@@ -1,5 +1,15 @@
 #helm chart 생성
-
+terraform {
+  required_providers {
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.11.0"
+    }
+    helm = {
+      source = "hashicorp/helm"
+    }
+  }
+}
 
 resource "helm_release" "argocd" {
   namespace        = var.argocd_chart.namespace
