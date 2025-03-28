@@ -17,8 +17,8 @@ resource "aws_security_group" "rds_sg" {
     from_port        = var.db_port
     to_port          = var.db_port
     protocol         = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    #security_groups  = [var.backend_sg_id]  # EKS 백엔드에서 접근 허용하는 SG ID
+    #cidr_blocks = ["0.0.0.0/0"]
+    security_groups  = [var.backend_sg_id]  # EKS 백엔드에서 접근 허용하는 SG ID
   }
 
   egress {

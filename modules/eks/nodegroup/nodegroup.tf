@@ -12,11 +12,11 @@ resource "aws_eks_node_group" "this" {
     min_size     = var.min_size
   }
 
-  # # 런치 템플릿 사용 설정
-  # launch_template {
-  #   id      = aws_launch_template.workers_launch_template.id
-  #   version = "$Latest"
-  # }
+  # 런치 템플릿 사용 설정
+  launch_template {
+    id      = aws_launch_template.workers_launch_template.id
+    version = "$Latest"
+  }
 
   instance_types = [var.instance_type]
   ami_type       = "AL2_x86_64"

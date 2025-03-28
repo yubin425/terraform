@@ -42,6 +42,13 @@ resource "aws_security_group" "sg_eks_node" {
   cidr_blocks = var.sg_eks_cluster_ingress_list  # 또는 클러스터 내부 IP 범위
 }
 
+  ingress {
+  from_port   = 9443
+  to_port     = 9443
+  protocol    = "TCP"
+  cidr_blocks = var.sg_eks_cluster_ingress_list  # 또는 클러스터 내부 IP 범위
+}
+
   # 모든 트래픽 허용 egress 규칙 (필요에 따라 조정)
   egress {
     from_port   = 0

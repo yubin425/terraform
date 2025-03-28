@@ -154,10 +154,10 @@ module "addons" {
 #   depends_on = [module.eks_cluster]
 # }
 
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks_cluster.cluster_id
-  depends_on = [module.eks_cluster]
-}
+# data "aws_eks_cluster_auth" "cluster" {
+#   name = module.eks_cluster.cluster_id
+#   depends_on = [module.eks_cluster]
+# }
 
 
 #alb-controller
@@ -263,14 +263,14 @@ resource "aws_default_security_group" "eks_default" {
 }
 
 
-data "aws_security_groups" "eks_node_sg" {
-  filter {
-    name   = "tag:aws:eks:cluster-name"
-    values = ["eks-cluster-dev"]
-  }
-  depends_on = [module.eks_cluster, module.eks_nodegroup]
+# data "aws_security_groups" "eks_node_sg" {
+#   filter {
+#     name   = "tag:aws:eks:cluster-name"
+#     values = ["eks-cluster-dev"]
+#   }
+#   depends_on = [module.eks_cluster, module.eks_nodegroup]
 
-}
+# }
 
 module "rds" {
   source = "../modules/rds"
@@ -280,7 +280,7 @@ module "rds" {
   servicename = var.servicename
   vpc_id         = module.vpc.vpc_id
   db_subnet_ids  = module.vpc.db_subnet_ids   # VPC 모듈에서 DB 전용 서브넷 ID 리스트
-  #backend_sg_id  = #data.aws_security_groups.eks_node_sg.id #module.eks_nodegroup.eks_node_sg_id #노드그룹 sg 설정후 변경할 것
+  backend_sg_id  = module.eks_nodegroup.eks_node_sg_id  #data.aws_security_groups.eks_node_sg.id #노드그룹 sg 설정후 변경할 것
   db_username    = var.db_username
   db_password    = var.db_password
   tags           = var.tags

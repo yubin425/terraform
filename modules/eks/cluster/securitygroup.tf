@@ -32,6 +32,12 @@ resource "aws_security_group" "eks_cluster_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+    ingress {
+  from_port   = 9443
+  to_port     = 9443
+  protocol    = "TCP"
+  cidr_blocks =  ["0.0.0.0/0"]  # 또는 클러스터 내부 IP 범위
+}
 
   egress {
     from_port   = 0
@@ -57,3 +63,4 @@ resource "aws_security_group" "eks_cluster_sg" {
   }, var.tags)
   depends_on =[var.sg_eks_node]
 }
+

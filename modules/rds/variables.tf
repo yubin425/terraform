@@ -18,10 +18,10 @@ variable "db_subnet_ids" {
   type        = list(string)
 }
 
-# variable "backend_sg_id" {
-#   description = "Security Group ID of the backend (EKS) allowed to access RDS"
-#   type        = string
-# }
+variable "backend_sg_id" {
+  description = "Security Group ID of the backend (EKS) allowed to access RDS"
+  type        = string
+}
 
 variable "engine" {
   description = "Database engine (e.g., mysql, postgres)"
