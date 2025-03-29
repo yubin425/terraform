@@ -4,16 +4,15 @@ variable "region" {
 }
 variable "stage" {
   type    = string
-  default = "stage"
+  default = "dev"
 }
 variable "servicename" {
   type    = string
-  default = "terrafrom-0425"
+  default = "tf-0425"
 }
 variable "tags" {
   type = map(string)
   default = {
-    "name" = "nilla0425-VPC"
   }
 }
 variable "az" {
@@ -109,32 +108,75 @@ variable "instance_ebs_volume" {
 # }
 
 ##RDS
-variable "rds_dbname" {
-  type    = string
-  default = "jung9546"
-}
-variable "rds_instance_count" {
-  type    = string
-  default = "2"
-}
-variable "sg_allow_ingress_list_aurora" {
-  type    = list(any)
-  default = ["10.2.92.64/26", "10.2.92.128/26", "10.2.92.18/32"]
-}
-variable "associate_public_ip_address" {
-  type    = bool
-  default = true
+variable "rds_name" {
+  description = "Identifier for the RDS instance"
+  type        = string
+  default = "mysql-db"
 }
 
-##KMS
-variable "rds_kms_arn" {
-  type    = string
-  default = "arn:aws:kms:ap-northeast-2:471112992234:key/1dbf43f7-1847-434c-bc3c-1beb1b86e480"
+variable "engine" {
+  description = "Database engine (e.g., mysql, postgres)"
+  type        = string
+  default     = "mysql"
 }
-variable "ebs_kms_key_id" {
-  type    = string
-  default = "arn:aws:kms:ap-northeast-2:471112992234:key/43b0228d-0a06-465c-b25c-7480b07b5276"
+variable "engine_version" {
+  description = "Database engine version"
+  type        = string
+  default     = "8.0"
 }
+variable "instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t3.micro"
+}
+variable "allocated_storage" {
+  description = "Allocated storage in GB"
+  type        = number
+  default     = 20
+}
+variable "db_username" {
+  description = "Database username"
+  type        = string
+  default = "nilla"
+}
+variable "db_password" { #나중에 환경변수로 필히 변경
+  description = "Database password"
+  type        = string
+  sensitive   = true
+  default = "nilla0425"
+}
+variable "db_port" {
+  description = "Database port"
+  type        = number
+  default     = 3306
+}
+
+# variable "rds_dbname" {
+#   type    = string
+#   default = "jung9546"
+# }
+# variable "rds_instance_count" {
+#   type    = string
+#   default = "2"
+# }
+# variable "sg_allow_ingress_list_aurora" {
+#   type    = list(any)
+#   default = ["10.2.92.64/26", "10.2.92.128/26", "10.2.92.18/32"]
+# }
+# variable "associate_public_ip_address" {
+#   type    = bool
+#   default = true
+# }
+
+# ##KMS
+# variable "rds_kms_arn" {
+#   type    = string
+#   default = "arn:aws:kms:ap-northeast-2:471112992234:key/1dbf43f7-1847-434c-bc3c-1beb1b86e480"
+# }
+# variable "ebs_kms_key_id" {
+#   type    = string
+#   default = "arn:aws:kms:ap-northeast-2:471112992234:key/43b0228d-0a06-465c-b25c-7480b07b5276"
+# }
 
 #server_port
 variable "server_port" {
@@ -169,10 +211,7 @@ variable "certificate_arn" {
     type  = string
     default = "arn:aws:acm:us-east-1:509399632105:certificate/2d0c695a-bbf8-4377-a80f-4e6937670f80"
 }
-variable "vpc_id" {
-    type  = string
-    default = "module.vpc.vpc_id "
-}
+
 # variable "instance_ids" {
 #     type  = list
 # }
@@ -184,3 +223,16 @@ variable "target_type" {
     type = string
     default = "instance"
 }
+
+variable "key_name" {
+    type = string
+    default = "kuber-key"
+}
+
+variable "argocd_domain" {
+  description = "Domain name for Argo CD UI"
+  type        = string
+  default = "argo.nilla.o-r.kr"
+}
+
+

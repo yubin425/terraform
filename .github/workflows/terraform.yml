@@ -3,12 +3,12 @@ name: 'Terraform'
 on:
   push:
     branches:
-      - 'master' # 나중에 스테이지 명으로 변경
+      - 'main' # 나중에 스테이지 명으로 변경
   pull_request:
     branches:
-      - 'master'
+      - 'main'
     paths-ignore:
-      - '**/stage-terraform.yml'
+      - '**/terraform.yml'
   delete:
     branches:
       - 'feature/*'  # feature 브랜치 삭제 시 destroy 실행
@@ -21,16 +21,13 @@ on:
 
 env:
   AWS_REGION: us-east-1  # AWS 리전 설정
+  CLUSTER_NAME: eks-cluster-dev
 
 jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
     if: github.event_name != 'workflow_dispatch' || github.event.inputs.confirm_destroy != 'DESTROY'
-
-    defaults:
-      run:
-        shell: bash
 
     steps:
       - name: Checkout Repository
@@ -62,7 +59,33 @@ jobs:
         run: |
           cd terraform_stage
           terraform apply -auto-approve -input=false
-  
+
+      # aws-auth 설정용 kubectl 설치 및 apply
+      - name: Install kubectl
+        run: |
+          curl -LO "https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.3/2024-12-12/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin
+
+      - name: Update Kubeconfig
+        run: |
+          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+      - name: Patch aws-auth ConfigMap for Bastion Role
+        run: |
+          cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: aws-auth
+            namespace: kube-system
+          data:
+            mapRoles: |
+              - rolearn: arn:aws:iam::<ACCOUNT_ID>:role/bastion-role-dev-0425
+                username: bastion-user
+                groups:
+                  - system:masters
+          EOF
   
   destroy:
     name: 'Terraform Destroy'
@@ -84,7 +107,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.TF_NILLA_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Init  # 🚀 추가된 부분
+      - name: Terraform Init 
         run: |
           cd terraform_stage
           terraform init -reconfigure  # 백엔드 초기화 실행
